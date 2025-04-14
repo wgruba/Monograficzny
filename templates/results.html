@@ -2,29 +2,39 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Wyniki analizy</title>
-  <!-- Wczytanie biblioteki Plotly -->
+  <title>Wyniki analizy systemu PV</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; margin: 2em; }
     .chart { margin-bottom: 2em; }
     a { text-decoration: none; color: #0066cc; }
+    .analysis-summary { background: #f5f5f5; padding: 1em; margin-bottom: 2em; border-radius: 5px; }
   </style>
 </head>
 <body>
-  <h1>Wyniki analizy</h1>
-  <p><strong>Łączne oszczędności autokonsumpcyjne:</strong> {{ total_auto }} PLN</p>
-  <p><strong>Łączny wynik feed-in:</strong> {{ total_feed_in }} PLN</p>
+  <h1>Wyniki analizy systemu PV</h1>
+
+  <div class="analysis-summary">
+    {{ analysis_summary | safe }}
+  </div>
 
   <div class="chart">
-    <h2>Produkcja energii</h2>
-    <!-- Osadzony wykres produkcji energii -->
+    <h2>Produkcja energii (dane SunnyPortal)</h2>
     {{ production_chart | safe }}
   </div>
 
   <div class="chart">
+    <h2>Promieniowanie słoneczne (NASA POWER)</h2>
+    {{ nasa_chart | safe }}
+  </div>
+
+  <div class="chart">
+    <h2>Symulacja produkcji PV (specyfikacja modułów)</h2>
+    {{ spec_sim_chart | safe }}
+  </div>
+
+  <div class="chart">
     <h2>Analiza ekonomiczna</h2>
-    <!-- Osadzony wykres analizy ekonomicznej -->
     {{ economics_chart | safe }}
   </div>
 

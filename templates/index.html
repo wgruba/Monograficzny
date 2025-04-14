@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Analiza paneli słonecznych</title>
+  <title>Analiza systemu PV</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 2em; }
     form { max-width: 400px; }
@@ -12,7 +12,8 @@
   </style>
 </head>
 <body>
-  <h1>Analiza paneli słonecznych</h1>
+  <h1>Analiza systemu PV</h1>
+  <p>Wprowadź przedział dat (np. 2025-04-07 do 2025-04-13), aby pobrać dane z odpowiednich plików i zobaczyć szczegółowe analizy produkcji, ekonomii oraz symulację na podstawie specyfikacji paneli.</p>
   <form method="POST" action="{{ url_for('results') }}">
     <label for="start_date">Data początkowa:</label>
     <input type="date" id="start_date" name="start_date" required>
