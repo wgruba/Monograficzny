@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Analiza paneli słonecznych</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    form { max-width: 400px; }
+    label { display: block; margin-top: 1em; }
+    input[type="date"] { width: 100%; padding: 0.5em; }
+    button { margin-top: 1em; padding: 0.5em 1em; }
+  </style>
+</head>
+<body>
+  <h1>Analiza paneli słonecznych</h1>
+  <form method="POST" action="{{ url_for('results') }}">
+    <label for="start_date">Data początkowa:</label>
+    <input type="date" id="start_date" name="start_date" required>
+
+    <label for="end_date">Data końcowa:</label>
+    <input type="date" id="end_date" name="end_date" required>
+
+    <button type="submit">Pokaż analizy</button>
+  </form>
+</body>
+</html>

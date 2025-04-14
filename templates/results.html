@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Wyniki analizy</title>
+  <!-- Wczytanie biblioteki Plotly -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    .chart { margin-bottom: 2em; }
+    a { text-decoration: none; color: #0066cc; }
+  </style>
+</head>
+<body>
+  <h1>Wyniki analizy</h1>
+  <p><strong>Łączne oszczędności autokonsumpcyjne:</strong> {{ total_auto }} PLN</p>
+  <p><strong>Łączny wynik feed-in:</strong> {{ total_feed_in }} PLN</p>
+
+  <div class="chart">
+    <h2>Produkcja energii</h2>
+    <!-- Osadzony wykres produkcji energii -->
+    {{ production_chart | safe }}
+  </div>
+
+  <div class="chart">
+    <h2>Analiza ekonomiczna</h2>
+    <!-- Osadzony wykres analizy ekonomicznej -->
+    {{ economics_chart | safe }}
+  </div>
+
+  <a href="{{ url_for('index') }}">Powrót do formularza</a>
+</body>
+</html>
