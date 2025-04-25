@@ -1,27 +1,17 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Analiza systemu PV</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 2em; }
-    form { max-width: 400px; }
-    label { display: block; margin-top: 1em; }
-    input[type="date"] { width: 100%; padding: 0.5em; }
-    button { margin-top: 1em; padding: 0.5em 1em; }
-  </style>
+  <meta charset="utf-8">
+  <title>Analiza PV – wybór tygodnia</title>
+  <style>body{font-family:sans-serif;padding:2em;}form{max-width:400px;}</style>
 </head>
 <body>
-  <h1>Analiza systemu PV</h1>
-  <p>Wprowadź przedział dat (np. 2025-04-07 do 2025-04-13), aby pobrać dane z odpowiednich plików i zobaczyć szczegółowe analizy produkcji, ekonomii oraz symulację na podstawie specyfikacji paneli.</p>
-  <form method="POST" action="{{ url_for('results') }}">
-    <label for="start_date">Data początkowa:</label>
-    <input type="date" id="start_date" name="start_date" required>
-
-    <label for="end_date">Data końcowa:</label>
-    <input type="date" id="end_date" name="end_date" required>
-
-    <button type="submit">Pokaż analizy</button>
+  <h1>Analiza danych z ogniw słonecznych</h1>
+  <p>Wybierz 7 kolejnych dni (1 tydzień):</p>
+  <form method="post" action="{{ url_for('results') }}">
+    <label>Początek: <input type="date" name="start_date" required></label><br><br>
+    <label>Koniec:   <input type="date" name="end_date"   required></label><br><br>
+    <button>Analizuj</button>
   </form>
 </body>
 </html>

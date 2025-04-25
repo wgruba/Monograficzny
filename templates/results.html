@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <title>Wyniki analizy systemu PV</title>
+  <meta charset="utf-8">
+  <title>Wyniki analizy tygodnia</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2em; }
-    .chart { margin-bottom: 2em; }
-    a { text-decoration: none; color: #0066cc; }
-    .analysis-summary { background: #f5f5f5; padding: 1em; margin-bottom: 2em; border-radius: 5px; }
+    body{font-family:sans-serif;padding:2em;}
+    .chart{margin-bottom:2em;}
+    abbr{border-bottom:1px dotted #000;cursor:help;}
   </style>
 </head>
 <body>
-  <h1>Wyniki analizy systemu PV</h1>
+  <h1>Wyniki analizy tygodnia</h1>
 
-  <div class="analysis-summary">
-    {{ analysis_summary | safe }}
-  </div>
+  <section>
+    <h2>Wyjaśnienia</h2>
+    <p><strong>Feed-in</strong> – {{ NET_RATIO }}% kredytu za energię oddaną do sieci,
+       odebraną później po cenie <abbr title="Cena zakupu 1 kWh z sieci">kosztu zakupu</abbr>.</p>
+    <p><strong>Oszczędność z autokonsumpcji</strong> – unikanie zakupu energii z sieci.</p>
+  </section>
 
-  <div class="chart">
-    <h2>Produkcja energii (dane SunnyPortal)</h2>
-    {{ production_chart | safe }}
-  </div>
+  <div class="chart">{{ comp_chart   |safe }}</div>
+  <div class="chart">{{ sp_chart     |safe }}</div>
+  <div class="chart">{{ pv_chart     |safe }}</div>
+  <div class="chart">{{ profile_chart|safe }}</div>
+  <div class="chart">{{ peak_pie     |safe }}</div>
+  <div class="chart">{{ save_line    |safe }}</div>
+  <div class="chart">{{ feed_line    |safe }}</div>
 
-  <div class="chart">
-    <h2>Promieniowanie słoneczne (NASA POWER)</h2>
-    {{ nasa_chart | safe }}
-  </div>
+  <section>
+    <h2>Podsumowanie ekonomiczne</h2>
+    <ul>
+      <li><abbr title="Zainstalowana moc systemu PV">Moc zainst.</abbr>: <strong>{{ INSTALLED_KWP }} kWp</strong></li>
+      <li><abbr title="Autokonsumpcja tygodniowa">Oszczędności</abbr>: <strong>{{ TOTAL_AUTO|round(2) }} PLN</strong></li>
+      <li><abbr title="Przychód z feed-in">Feed-in</abbr>: <strong>{{ TOTAL_FEED|round(2) }} PLN</strong></li>
+      <li><abbr title="Szacowany czas zwrotu inwestycji">Payback</abbr>: <strong>{{ PAYBACK|round(1) }} lat</strong></li>
+    </ul>
+  </section>
 
-  <div class="chart">
-    <h2>Symulacja produkcji PV (specyfikacja modułów)</h2>
-    {{ spec_sim_chart | safe }}
-  </div>
-
-  <div class="chart">
-    <h2>Analiza ekonomiczna</h2>
-    {{ economics_chart | safe }}
-  </div>
-
-  <a href="{{ url_for('index') }}">Powrót do formularza</a>
+  <p><a href="{{ url_for('index') }}">← Wróć</a></p>
 </body>
 </html>
