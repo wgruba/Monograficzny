@@ -9,29 +9,23 @@ import plotly.graph_objs as go
 
 app = Flask(__name__)
 
-# --------------------------------------------------------------------
-# PARAMETRY SYSTEMU PV I CENNIK (Polska 2025)
-# --------------------------------------------------------------------
 LICZBA_MODULI      = 27
-MODUL_MOC_W        = 190        # [W]
-INSTALLED_KWP      = LICZBA_MODULI * MODUL_MOC_W / 1000  # [kWp]
-MODULE_EFFICIENCY  = 0.149      # 14.9%
-PERFORMANCE_RATIO  = 0.80       # 80% strat
-MODULE_AREA        = 1.6        # [m²]
-TILT_ANGLE         = 30         # ° nachylenie
-AZIMUTH_ANGLE      = 180        # ° azymut (180° = południe)
+MODUL_MOC_W        = 190
+INSTALLED_KWP      = LICZBA_MODULI * MODUL_MOC_W / 1000
+MODULE_EFFICIENCY  = 0.149
+PERFORMANCE_RATIO  = 0.80
+MODULE_AREA        = 1.6
+TILT_ANGLE         = 30
+AZIMUTH_ANGLE      = 210
 
-PRICE_PEAK         = 0.70       # PLN/kWh – oszczędność autokonsumpcji
-PRICE_GRID         = 0.80       # PLN/kWh – cena zakupu z sieci
-NET_METERING_RATIO = 0.80       # 80% kredytu za oddaną energię
-COST_PER_KWP       = 3500       # PLN/kWp – koszt instalacji
+PRICE_PEAK         = 0.70
+PRICE_GRID         = 0.80
+NET_METERING_RATIO = 0.80
+COST_PER_KWP       = 3500
 
-LATITUDE  = 51.1087
-LONGITUDE = 17.0597
+LATITUDE  = 51.0631
+LONGITUDE = 17.0334
 
-# --------------------------------------------------------------------
-# 1) Parsowanie CSV SunnyPortal (_3, _4, _5)
-# --------------------------------------------------------------------
 def parse_measurement_file(path, base_date, col):
     if not pd.io.common.file_exists(path):
         return pd.DataFrame()
@@ -77,9 +71,6 @@ def fetch_sunnyportal(start, end):
     df["hour"] = df.timestamp.dt.hour
     return df
 
-# --------------------------------------------------------------------
-# 2) Pobranie irradiance forecast z Open-Meteo (GHI, DHI, DNI)
-# --------------------------------------------------------------------
 def fetch_radiation_forecast(start, end):
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
@@ -104,9 +95,6 @@ def fetch_radiation_forecast(start, end):
     df["hour"] = df.timestamp.dt.hour
     return df
 
-# --------------------------------------------------------------------
-# 3) Symulacja POA via pvlib – bez warningów
-# --------------------------------------------------------------------
 def simulate_pv_poa(df_rad):
     if df_rad.empty:
         return pd.DataFrame()
@@ -122,9 +110,7 @@ def simulate_pv_poa(df_rad):
         solar_zenith=solpos["apparent_zenith"],
         solar_azimuth=solpos["azimuth"]
     )["poa_global"]
-    # dodajemy do df kolumnę poa_global
     df["poa_irradiance"] = irrads.values
-    # obliczamy produkcję w kWh
     df["production_kWh"] = (
         df["poa_irradiance"] * MODULE_AREA * MODULE_EFFICIENCY * PERFORMANCE_RATIO
         / 1000.0 * LICZBA_MODULI
@@ -134,9 +120,6 @@ def simulate_pv_poa(df_rad):
     df["hour"] = df.timestamp.dt.hour
     return df[["timestamp","date","hour","production_kWh"]]
 
-# --------------------------------------------------------------------
-# 4) Analiza tygodnia + ekonomia
-# --------------------------------------------------------------------
 def analyze_week(sp_df, pv_df):
     sp_daily  = sp_df.groupby("date")["production_kWh"].sum().reset_index()
     pv_daily  = pv_df.groupby("date")["production_kWh"].sum().reset_index()
@@ -159,9 +142,7 @@ def analyze_week(sp_df, pv_df):
 
     return sp_daily, pv_daily, avg_hour, econ, total_auto, total_feed, peak, off, payback
 
-# --------------------------------------------------------------------
-# 5) Wykresy
-# --------------------------------------------------------------------
+
 def plot_line(df, x, y, title, ylab):
     if df.empty: return "<p>Brak danych</p>"
     fig = px.line(df, x=x, y=y, title=title)
@@ -196,9 +177,7 @@ def plot_comparison(sp_df, pv_df):
     )
     return fig.to_html(full_html=False)
 
-# --------------------------------------------------------------------
-# 6) Flask routes
-# --------------------------------------------------------------------
+
 @app.route("/")
 def index():
     return render_template("index.html")
