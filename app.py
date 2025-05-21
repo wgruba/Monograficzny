@@ -154,6 +154,7 @@ def simulate_pv_poa(df_rad):
         df.poa_irradiance * MODULE_AREA * MODULE_EFFICIENCY * PERFORMANCE_RATIO
         / 1000.0 * LICZBA_MODULI
     )
+    df["production_kWh"] *= 0.5
     df = df.reset_index()
     df["date"] = df.timestamp.dt.date
     df["hour"] = df.timestamp.dt.hour
@@ -172,7 +173,7 @@ def analyze_week(sp_df, pv_df):
     scale_map = s.set_index(["date","hour"])["scale"].to_dict()
 
     pv_df["production_kWh"] = pv_df.apply(
-        lambda r: r["production_kWh"] * scale_map.get((r["date"],r["hour"]), 0.0),
+        lambda r: r["production_kWh"] * 0.3 * scale_map.get((r["date"],r["hour"]), 0.0),
         axis=1
     )
 
